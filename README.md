@@ -16,6 +16,8 @@ Because of the nature of the data of our final project, I used a public dataset 
 ## Timeseries forecasting
 
 * [Google Collab Notebook](https://colab.research.google.com/drive/1dTPOm_nW5l_-_6untLYFwXQI308raoiS) - Colab notebook for the a detailed simulation and comparaison of timeseries forecasting techniques (Auto.SARIMA, ETS, and Facebook Prophet). 
+
+
 PS: 
 * You can check the notebook directly in this repository in [this file](https://github.com/AdelGasmi/CrimeAnalyzer/blob/master/timeseriesforecastingtechnique_statisticalmethods.ipynb)
 * We did also a comparaison with LSTM working on our real data. Best results always went to Facebook Prophet on the daily level.
