@@ -4,7 +4,7 @@ This is a snap shot of our project for the graduation as a Computer Science engi
 
 This is a Django app that provides a solution for descriptive and predictive (timeseries forecasting) analysis for crimes data. 
 
-Please take a look at the screen record of the example  [here] (https://github.com/AdelGasmi/CrimeAnalyzer/tree/master/static/visual/assets/videos/) to have a look about some of the functionalities. 
+Please take a look at the screen record of the example  [here](https://github.com/AdelGasmi/CrimeAnalyzer/tree/master/static/visual/assets/videos/) to have a look about some of the functionalities. 
 
 
 For this snap shot, and for dev purposes (privacy of the data that we worked on), I tried to make a specific version for generic data 
@@ -16,7 +16,7 @@ Because of the nature of the data of our final project, I used a public dataset 
 ## Timeseries
 
 * [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - Colab notebook for the a detailed simulation and comparaison of timeseries forecasting techniques. 
-PS: You can check the notebook directly in this repository in [this file] (https://github.com/AdelGasmi/CrimeAnalyzer/blob/master/timeseriesforecastingtechnique_statisticalmethods.ipynb)
+PS: You can check the notebook directly in this repository in [this file](https://github.com/AdelGasmi/CrimeAnalyzer/blob/master/timeseriesforecastingtechnique_statisticalmethods.ipynb)
 
 
 
