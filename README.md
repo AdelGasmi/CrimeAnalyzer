@@ -1,4 +1,4 @@
-# CrimeAnalyer Web App
+# CrimeAnalyer web app
 
 This is a snap shot of our project for the graduation as a Computer Science engineer in Data Science. 
 
@@ -9,16 +9,19 @@ Please take a look at the screen record of the example  [here](https://github.co
 
 For this snap shot, and for dev purposes (privacy of the data that we worked on), I tried to make a specific version for generic data 
 
-## Data Used
+## Data used
 
-Because of the nature of the data of our final project, I used a public dataset that is available [HERE] (https://www.kaggle.com/currie32/crimes-in-chicago).
+Because of the nature of the data of our final project, I used a public dataset that is available [HERE](https://www.kaggle.com/currie32/crimes-in-chicago).
  
-## Timeseries
+## Timeseries forecasting
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - Colab notebook for the a detailed simulation and comparaison of timeseries forecasting techniques. 
-PS: You can check the notebook directly in this repository in [this file](https://github.com/AdelGasmi/CrimeAnalyzer/blob/master/timeseriesforecastingtechnique_statisticalmethods.ipynb)
+* [Google Collab Notebook](https://colab.research.google.com/drive/1dTPOm_nW5l_-_6untLYFwXQI308raoiS) - Colab notebook for the a detailed simulation and comparaison of timeseries forecasting techniques (Auto.SARIMA, ETS, and Facebook Prophet). 
+PS: 
+* You can check the notebook directly in this repository in [this file](https://github.com/AdelGasmi/CrimeAnalyzer/blob/master/timeseriesforecastingtechnique_statisticalmethods.ipynb)
+* We did also a comparaison with LSTM working on our real data. Best results always went to Facebook Prophet on the daily level.
 
-
+## Visualization
+Actually, our solution is 80% based on visualizing data. For that, and using Javascript libraries (D3.Js, DC.Js, Plotly.Js, Leaflet.Js, etc.) combined with classification and clustering techniques in the backend (KMeans, Hierarchical clustering, and PCA ), we could offer many feautures in an interactive way. Take a look at our videos. 
 
 
 ## Building
