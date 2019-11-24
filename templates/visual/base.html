@@ -1,0 +1,231 @@
+{% load static %}
+
+<!doctype html>
+<html class="no-js" lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>CrimeAnalyzer - Visualisation et prévision de la criminalité | Gendarmerie Nationale</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="{% static "/visual/assets/images/icon/logo.ico" %}">
+
+<link rel="stylesheet" href="{% static "/forecasting/css/select.css" %}">
+
+    
+    <link rel="shortcut icon" type="image/png" href="{% static "/visual/assets/images/icon/favicon.ico" %}">
+    <link rel="stylesheet" href="{% static "/visual/assets/css/bootstrap.min.css" %}">
+    <link rel="stylesheet" href="{% static "/visual/assets/css/font-awesome.min.css" %}">
+    <link rel="stylesheet" href="{% static "/visual/assets/css/themify-icons.css" %}">
+    <link rel="stylesheet" href="{% static "/visual/assets/css/metisMenu.css"  %}">
+    <link rel="stylesheet" href="{% static "/visual/assets/css/owl.carousel.min.css"  %}">
+    <link rel="stylesheet" href="{% static "/visual/assets/css/slicknav.min.css"  %}">
+    <!-- amchart css -->
+    <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+    <!-- others css -->
+    <link rel="stylesheet" href="{% static "/visual/assets/css/typography.css"  %}">
+    <link rel="stylesheet" href="{% static "/visual/assets/css/default-css.css"  %}">
+    <link rel="stylesheet" href="{% static "/visual/assets/css/styles.css"  %}">
+    <link rel="stylesheet" href="{% static "/visual/assets/css/responsive.css"  %}">
+
+    <link rel="stylesheet" href="{% static "/visual/lib/css/dc.min.css" %}">
+    <link rel="stylesheet" href="{% static "/visual/lib/css/leaflet.css"%}">
+    <link rel="stylesheet" href="{% static "/visual/lib/css/MarkerCluster.css"%}">
+    <link rel="stylesheet" href="{% static "/visual/lib/css/MarkerCluster.Default.css"%}">
+    <link rel="stylesheet" href="{% static "/visual/css/custom.css"%}">
+
+    <!-- Multiple Datepicker -->
+    <link rel="stylesheet" href="{% static "/forecasting/css/datepicker.css" %}">
+    <!-- modernizr css -->
+    <script src="{% static "/visual/assets/js/vendor/modernizr-2.8.3.min.js"  %}"></script>
+</head>
+<body>
+    <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+    <!-- preloader area start -->
+    <div id="preloader">
+        <div class="loader"></div>
+    </div>
+    <!-- preloader area end -->
+    <!-- page container area start -->
+    <div class="page-container">
+        <!-- sidebar menu area start -->
+        <div class="sidebar-menu">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <a href="#"><img src="{% static "/visual/assets/images/icon/logo white.png" %}" alt="logo"></a>
+                </div>
+            </div>
+            <div class="main-menu">
+                <div class="menu-inner">
+                    <nav>
+                        <ul class="metismenu" id="menu">
+                            <li class="active">
+                                <a href="javascript:void(0)" aria-expanded="true"><i class="ti-dashboard"></i><span>Tableau de bord</span></a>
+                                <ul class="collapse">
+                                    <li><a href="/vis/home">Visualisation des données</a></li>
+                                    <li><a href="/vis/map/">Carte géographiques agrégées</a></li>
+                                    <li><a href="/vis/heat-map/">Carte de points chauds</a></li>
+                                    <li><a href="/vis/cluster-district/">Clustering des zones</a></li>
+                                    <li><a href="/vis/cluster/">Clustering des crimes</a></li>
+                                    <li><a href="/vis/compare/">Comparer des crimes</a></li>
+                                </ul>
+                            </li>
+                            <li class="active">
+                                <a href="javascript:void(0)" aria-expanded="true"><i class="ti-dashboard"></i><span>Prédiction des crimes</span></a>
+                                <ul class="collapse">
+                                    <li><a href="/predict/make/">Prévision</a></li>
+                                    <li><a href="/predict/instructions">Instructions</a></li>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <!-- sidebar menu area end -->
+        <!-- main content area start -->
+        <div class="main-content">
+            <!-- header area start -->
+            <div class="header-area">
+                <div class="row align-items-center">
+                    <!-- nav and search button -->
+                    <div class="col-md-6 col-sm-8 clearfix">
+                        <div class="nav-btn pull-left">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                    <!-- profile info & task notification -->
+                </div>
+            </div>
+            <!-- header area end -->
+            <!-- page title area start -->
+            <div class="page-title-area">
+                <div class="row align-items-center">
+                    <div class="col-sm-6">
+                        <div class="breadcrumbs-area clearfix">
+
+                            <ul class="breadcrumbs pull-left">
+                                <li><a href="#">CrimeAnalyzer</a></li>
+                                <li><span>{% block page_name %}{% endblock %}</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 clearfix">
+                        <div class="user-profile pull-right">
+                            <img class="avatar user-thumb" src="{% static "/visual/assets/images/author/policeman.png" %}" alt="avatar">
+                            <h4 class="user-name dropdown-toggle" data-toggle="dropdown">{{ user.username }} <i class="fa fa-angle-down"></i></h4>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#">Options</a>
+                                <a class="dropdown-item" href="{% url "logout" %}">Deconnexion</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- page title area end -->
+            <div class="main-content-inner">
+
+            {% block content %}
+
+            {% endblock %}
+
+            </div>
+        </div>
+        <!-- main content area end -->
+        <!-- footer area start-->
+        <footer>
+            <div class="footer-area">
+                <p>© Tous droits réservés <a href="/vis/home/">CrimeAnalyzer</a>.</p>
+            </div>
+        </footer>
+        <!-- footer area end-->
+    </div>
+    <!-- jquery latest version -->
+    <script src="{% static "/visual/assets/js/vendor/jquery-2.2.4.min.js" %}"></script>
+    <!-- bootstrap 4 js -->
+    <script src="{% static "/visual/assets/js/popper.min.js" %}"></script>
+    <script src="{% static "/visual/assets/js/bootstrap.min.js" %}"></script>
+    <script src="{% static "/visual/assets/js/owl.carousel.min.js" %}"></script>
+    <script src="{% static "/visual/assets/js/metisMenu.min.js" %}"></script>
+    <script src="{% static "/visual/assets/js/jquery.slimscroll.min.js" %}"></script>
+    <script src="{% static "/visual/assets/js/jquery.slicknav.min.js" %}"></script>
+
+    <!-- start chart js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <!-- start highcharts js -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <!-- start zingchart js -->
+    <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+    <script>
+        zingchart.MODULESDIR = "https://cdn.zingchart.com/modules/";
+        ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "ee6b7db5b51705a13dc2339db3edaf6d"];
+    </script>
+    <!-- all line chart activation -->
+    <script src="{% static "/visual/assets/js/line-chart.js" %}"></script>
+    <!-- all pie chart -->
+    <script src="{% static "/visual/assets/js/pie-chart.js"  %}"></script>
+    <!-- others plugins -->
+    <script src="{% static "/visual/assets/js/plugins.js" %}"></script>
+    <script src="{% static "/visual/assets/js/scripts.js" %}"></script>
+
+
+  <!-- graphs scripts -->
+    <script src="{% static "/visual/lib/js/underscore-min.js" %}"></script>
+    <script src="{% static "/visual/lib/js/d3.js" %}"></script>
+    <script src="{% static "/visual/lib/js/crossfilter.js" %}"></script>
+    <script src="{% static "/visual/lib/js/dc.js" %}"></script>
+    <script src="{% static "/visual/lib/js/queue.js" %}"></script>
+
+    <script src="{% static "/visual/lib/js/leaflet-src.js" %}"></script>
+    <script src="{% static "/visual/lib/js/leaflet-heat.js" %}"></script>
+    <script src="{% static "/visual/lib/js/leaflet.markercluster.js" %}"></script>
+    <script src="{% static "/visual/lib/js/dc-leaflet.js" %}"></script>
+
+    <script src="{% static "/visual/lib/js/reductio.js" %}"></script>
+    <script src="{% static "/visual/js/bundle.js" %}"></script>
+    <script src="{% static "/visual/js/saveSvgAsPng.js" %}"  type='text/javascript'></script>
+    <script src="{% static "/visual/js/FileSaver.js" %}"  type='text/javascript'></script>
+    <script src="{% static "/visual/js/leaflet.ajax.min.js" %}"  type='text/javascript'></script>
+    <script src="{% static "/visual/bVar.js" %}"  type='text/javascript'></script>
+    <script src="{% static "/visual/js/graphs.js" %}"  type='text/javascript'></script>
+
+
+    <!-- plotly js offline -->
+     
+    <script src="https://www.amcharts.com/lib/4/core.js"></script>
+    <script src="https://www.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://www.amcharts.com/lib/4/themes/material.js"></script>
+    <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+    <script src="https://www.amcharts.com/lib/3/serial.js"></script>
+    <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+    <script src="https://www.amcharts.com/lib/3/lang/fr.js"></script>
+    <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    <!-- amcharts js offline -->
+
+    <script src="{% static "/forecasting/js/amchart.js" %}" type='text/javascript'></script>
+    <script src="{% static "/forecasting/js/plotlygraph.js" %}" type='text/javascript'></script>
+
+    <script>
+
+        // When we click on the LI
+        $("ul.class > li").click(function () {
+            // If this isn't already active
+            if (!$(this).hasClass("active")) {
+                // Remove the class from anything that is active
+                $("li.active").removeClass("active");
+                // And make this active
+                $(this).addClass("active");
+            }
+        });
+    
+
+    </script>
+
+{% block scripts %}
+
+{% endblock %}

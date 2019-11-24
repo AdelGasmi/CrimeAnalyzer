@@ -1,0 +1,202 @@
+{% extends 'visual/base.html' %}
+{% block page_name %} Clustering des crimes(types) {% endblock %}
+{% block content %}
+                <!-- MAIN CONTENT GOES HERE -->
+                <div class="row">
+                    <div class="col-12 mt-5">
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="accordion5" class="according accordion-s2 gradiant-bg">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <a class="card-link" data-toggle="collapse" href="#accordion51" aria-expanded="true">Paramètres des algorithmes  </a>
+                                        </div>
+                                        <div id="accordion51" class="collapse" data-parent="#accordion5" style="">
+                                            <div class="card-body">
+                                                <form action="{% url 'kmeans'  %}" method="post" id="filter_form">
+                                                {% csrf_token %}
+                                                    <b class="text-muted mb-3 mt-4 d-block">Choix des regions</b>
+                                                    <input type="checkbox" onclick="toggle(this, 'regions[]');" />Cochez toutes<br />
+                                                    {% for region in regions  %}
+                                                        <div class="custom-control custom-checkbox custom-control-inline">
+                                                        <input type="checkbox" class="custom-control-input regionBox" id="{{ region }}" name="regions[]" value="{{ region }}">
+                                                        <label class="custom-control-label" for="{{ region }}">{{ region }}</label>
+                                                    </div>
+                                                    {% endfor %}
+
+                                                <div class="form-row">
+                                                <div class="col-md-4 mb-3">
+                                                    <div class="form-group">
+                                                        <label for="start_date" class="col-form-label">Date début</label>
+                                                        <input class="form-control" name="startDate" type="date" value="2016-01-05" id="start_date">
+                                                     </div>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <div class="form-group">
+                                                        <label for="end_date" class="col-form-label">Date fin</label>
+                                                        <input class="form-control" name="endDate" type="date" value="2016-03-05" id="end_date">
+                                                     </div>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="end_date" class="col-form-label">Arrestation</label>
+                                                    <div class="form-group">
+                                                        <div class="custom-control custom-checkbox custom-control-inline">
+                                                            <input type="checkbox" class="custom-control-input arrest" id="true" name="arrest[]" value="1">
+                                                            <label class="custom-control-label" for="true">Oui</label>
+                                                        </div>
+                                                        <div class="custom-control custom-checkbox custom-control-inline">
+                                                            <input type="checkbox" class="custom-control-input arrest" id="false" name="arrest[]" value="0">
+                                                            <label class="custom-control-label" for="false">Non</label>
+                                                        </div>
+                                                     </div>
+                                                </div>
+                                            </div>
+                                                    <h4 class="header-title">Kmeans</h4>
+                                                    <div class="form-row">
+                                                        <div class="col-md-4 mb-3">
+                                                            <div class="form-group">
+                                                                <label for="end_date" class="col-form-label">Nombre de cluster</label>
+                                                                <input class="form-control" name="numberClusters" required id="clusters" type="number">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4 mb-3">
+                                                            <div class="form-group">
+                                                                <label for="end_date" class="col-form-label">Nombre d'essais (optionnel) </label>
+                                                                <input class="form-control" name="numberEssais" value="10" id="essais" type="number">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4 mb-3">
+                                                            <div class="form-group">
+                                                                <label for="end_date" class="col-form-label">Nombre d'iterations (optionnel) </label>
+                                                                <input class="form-control" name="numberiterations" value="300" id="iterations" type="number">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <h4 class="header-title">Clustering hiérarchique</h4>
+                                                    <div class="form-row">
+                                                        <div class="col-md-4 mb-3">
+                                                            <div class="form-group">
+                                                                <label for="end_date" class="col-form-label">Nombre de cluster (optionnel)</label>
+                                                                <input class="form-control" name="numberClustersHi"  id="clustersHi" type="number">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary mt-4 pr-4 pl-4" >Calculer</button>
+
+                                                 </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="table-result" style="visibility: hidden">
+                    <div class="col-xl-12 mt-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="header-title">Resultats</h4>
+                                <div class="single-table">
+                                    <div class="table-responsive">
+                                        <p>Kmeans</p>
+                                        <table class="table text-center">
+                                            <thead class="text-uppercase bg-primary">
+                                                <tr class="text-white">
+                                                    <th scope="col">Cluster</th>
+                                                    <th scope="col">Elements</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="table-clustering">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="single-table">
+                                    <div class="table-responsive">
+                                        <p>classification hiérarchique</p>
+                                        <table class="table text-center">
+                                            <thead class="text-uppercase bg-primary">
+                                                <tr class="text-white">
+                                                    <th scope="col">Cluster</th>
+                                                    <th scope="col">Elements</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="table-hi">
+                                            `
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    <div class="modal1"><!-- Place at bottom of page --></div>
+
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript">
+    $body = $("body");
+
+    $(document).on({
+        ajaxStart: function() { $body.addClass("loading");    },
+        ajaxStop: function() { $body.removeClass("loading"); }
+    });
+        // this function will generate a png file of the element provided by ID
+        function toPNG() {
+            var options = {};
+            options.backgroundColor = '#ffffff';
+            options.selectorRemap = function(s) { return s.replace(/\.dc-chart/g, ''); };
+            var chart = document.getElementById('compareChart').getElementsByTagName('svg')[0];
+            saveSvgAsPng(chart, 'chart.png', options)
+
+        }
+
+        var token = '{{csrf_token}}';
+        $(document).on('submit', '#filter_form', function(e){
+
+            e.preventDefault();
+            var arrest = [];
+            $(".arrest:checked").each(function () {
+                arrest.push(this.value)
+            });
+            var regions = [];
+            $(".regionBox:checked").each(function () {
+                regions.push(this.value)
+            });
+            $.ajax({
+                headers: { "X-CSRFToken": token },
+                type:'POST',
+                url:'../makeKmeans',
+                data:{
+                    regions: regions,
+                    startDate: $("#start_date").val(),
+                    endDate: $("#end_date").val(),
+                    arrest: arrest,
+                    numberClusters: $("#clusters").val(),
+                    numberEssais : $("#essais").val(),
+                    numberIterations: $("#iterations").val(),
+                    numberClustersHi: $("#clustersHi").val(),
+                },
+                success : function (response) {
+                    console.log(JSON.parse(response))
+                    var element = document.getElementById('table-result');
+                    if(element.style.visibility =='hidden'){
+                        element.style.visibility = 'visible';
+                    };
+                    document.getElementById('table-clustering').innerHTML= makeClusteringResultsTable(JSON.parse(response)['kmeans']);
+                    document.getElementById('table-hi').innerHTML= makeClusteringResultsTable(JSON.parse(response)['hi']);
+                    //makeClusteringResultsTable(JSON.parse(response)['hi'])
+                },
+                error : function (msg) {
+                    alert('no response');
+                }
+            });
+        });
+    </script>
+{% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,290 @@
+{% extends 'visual/base.html' %}
+
+{% block content %}
+
+<body class="keen-dashboard">
+  <div class="jumbotron">
+    <h4 class="display-6">Prévision de la criminalité</h4>
+    <p class="lead">Pour une utilisation efficace de la fonctionnalité de prédiction, veuillez suivre les étapes
+      suivantes:</p>
+    <hr class="my-4">
+    <p>1 => Filtrer les données
+    </p>
+    <p>2 => Paramétrez le modèle  (Lire la partie Instruction pour plus de détails)</p>
+    <p>3 => Appliquer le modèle de prédiction</p>
+    <p>4 => Visualiser les résultats</p>
+  </div>
+
+
+  <div class="card-body">
+    <div id="accordion5" class="according accordion-s2 gradiant-bg">
+      <div class="card">
+        <div class="card-header">
+          <a class="card-link collapsed" data-toggle="collapse" href="#accordion51" aria-expanded="false">Filtrage de
+            données #1</a>
+        </div>
+        <div id="accordion51" class="collapse" data-parent="#accordion5" style="">
+          <div class="card-body">
+            <!--Here goes the 1st step code-->
+            <div class="" style="padding: 30px;">
+              <h4 class="display-8">1. Filtrage de données</h4>
+              <div class="row">
+                <br>
+                <div class="row">
+                  <div class="col-md-12">
+                    <form action="{% url 'makeForecast'  %}" method="post" id="forecast_form">
+                      {% csrf_token %}
+
+                      <h4 class="header-title">Filtrage des données</h4>
+                      <b class="text-muted mb-3 mt-4 d-block">Types de crimes</b>
+                      <input type="checkbox" onclick="toggle(this, 'types[]');" />Tout Sélectionner<br />
+                      {% for crime in crimes  %}
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input crimeBox" id="{{ crime }}" name="types[]" value="{{ crime }}">
+                        <label class="custom-control-label" for="{{ crime }}">{{ crime }}</label>
+                      </div>
+                      {% endfor %}
+                      <b class="text-muted mb-3 mt-4 d-block">Choix des regions</b>
+                      <input type="checkbox" onclick="toggle(this, 'regions[]');" />Tout Sélectionner<br />
+                      {% for region in regions  %}
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input regionBox" id="{{ region }}" name="regions[]" value="{{ region }}">
+                        <label class="custom-control-label" for="{{ region }}">{{ region }}</label>
+                      </div>
+                      {% endfor %}
+
+                      <b class="text-muted mb-3 mt-4 d-block">Types de lieu</b>
+                      <input type="checkbox" onclick="toggle(this, 'places[]');" />Tout Sélectionner<br />
+                      {% for place in places  %}
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input placesBox" id="{{ place }}" name="places[]" value="{{ place }}">
+                        <label class="custom-control-label" for="{{ place }}">{{ place }}</label>
+                      </div>
+                      {% endfor %}
+
+                      <div class="form-row">
+                        <div class="col-md-4 mb-3">
+                          <label for="end_date" class="col-form-label">Cas</label>
+                          <div class="form-group">
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                              <input type="checkbox" class="custom-control-input arrest" id="true" name="arrest[]" value="1">
+                              <label class="custom-control-label" for="true">Résolu</label>
+                            </div>
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                              <input type="checkbox" class="custom-control-input arrest" id="false" name="arrest[]" value="0">
+                              <label class="custom-control-label" for="false">Non Résolu</label>
+                            </div>
+                          </div>
+                        </div>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="col-md-4 mb-4">
+                          <div class="form-group">
+                            <label for="start_date" class="col-form-label">Date début</label>
+                            <input class="form-control" name="startDate" type="date" value="2016-01-05" required id="startDate">
+                          </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                          <div class="form-group">
+                            <label for="end_date" class="col-form-label">Date fin</label>
+                            <input class="form-control" name="endDate" type="date" value="2016-03-05" required id="endDate">
+                          </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                          <div class="form-group">
+                            <label for="period" class="col-form-label">Période future (en jours) </label>
+                            <input class="form-control" name="period" value="30" id="period" type="number">
+                          </div>
+                        </div>
+                      </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header" >
+          <a class="collapsed card-link" data-toggle="collapse" href="#accordion53">Paramétrage du modèle de prévision
+            #2</a>
+        </div>
+        <div id="accordion53" class="collapse" data-parent="#accordion5">
+          <div class="card-body">
+            <!--Here goes the 1st step code-->
+            <div style="padding: 30px;" id="prophet" style="display: block;">
+                {% csrf_token %}
+                <h4 class="header-title">Saisonnalité</h4>
+                <div class="form-row col-md-6 col-lg-6">
+                  <b class="text-muted col-md-4 mb-3 mb-3 d-block">Mode saisonnalité</b>
+                  <br>
+                 
+                  <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" checked class="custom-control-input" id="modeAdditif" name="modeAdditif" value="additive">
+                    <label class="custom-control-label" for="modeAdditif">additif</label>
+                  </div>
+                  <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox"  class="custom-control-input" id="modeMultiplicatif" name="modeMultiplicatif" value="multiplicative">
+                    <label class="custom-control-label" for="modeMultiplicatif">multiplicatif</label>
+                  </div>
+                  
+                </div>
+                <div class="form-row">
+                  <div class="col-md-4 mb-3">
+                    <div class="form-group">
+                      <label for="end_date" class="col-form-label">Ordre hebdomadaire </label>
+                      <input class="form-control" name="ordreHebdomadaire" min="0" value="20" id="ordreHebdomadaire"
+                        type="number">
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <div class="form-group">
+                      <label for="end_date" class="col-form-label">Ordre annuel</label>
+                      <input class="form-control" name="ordreAnnuel" value="5" min="0" id="ordreAnnuel" type="number">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <div class="form-group">
+                    <label for="end_date" class="col-form-label">Echelle à priori de saisonnalité</label>
+                    <input class="form-control" name="seasonalityPriorScale" min="0" required id="seasonalityPriorScale" type="numbre" value="10">
+                    <label for="end_date" class="col-form-label">Echelle à priori de changements</label>
+                    <input class="form-control" name="changepointPriorScale" min="0" required id="changepointPriorScale" type="numbre" value="10">
+                  </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Calculer</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <a class="collapsed card-link" data-toggle="collapse" href="#accordion54">Résultats et Interprétation #3 &
+            #4</a>
+        </div>
+        <div id="accordion54" class="collapse" data-parent="#accordion5">
+          <div class="card-body" style="padding: 30px;">
+            <h4>1. Prévision de la criminalité</h4>
+            <div class="row">
+              <div style="height: 600px; width: 1000px;" id="myDiv"></div>
+            </div>
+            <div class="row">
+                <div style="height: 600px; width: 1000px; vertical-align:middle;" id="components"></div>
+                <div id="link"></div>
+            </div>
+            <h4>2. Evaluation du modèle</h4>
+            <div  class="row">
+                <div class="col-md-8 offset-2" id="results"></div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div class="modal1">
+    <!-- Place at bottom of page -->
+  </div>
+
+
+  {% endblock %}
+
+  {% block scripts %}
+
+  <script type="text/javascript">
+
+
+    document.getElementById("modeAdditif").disabled = true;
+     document.getElementById("modeMultiplicatif").disabled = true;
+
+      $body = $("body");
+       $(document).on({
+         ajaxStart: function () { $body.addClass("loading"); },
+         ajaxStop: function () { $body.removeClass("loading"); }
+      });
+    var token = '{{csrf_token}}';
+
+    $(document).on('submit', '#forecast_form', function (e) {
+
+      if (document.getElementById('image1')) {
+        document.getElementById('image1').remove();
+      };
+      e.preventDefault();
+      var crimesSelected = [];
+      $(".crimeBox:checked").each(function () {
+        crimesSelected.push(this.value)
+      });
+      var regions = [];
+      $(".regionBox:checked").each(function () {
+        regions.push(this.value)
+      });
+      var places = [];
+      $(".placesBox:checked").each(function () {
+        places.push(this.value)
+      });
+      var arrest = [];
+      $(".arrest:checked").each(function () {
+        arrest.push(this.value)
+      });
+      $.ajax({
+        headers: { "X-CSRFToken": token },
+        type: 'POST',
+        url: '../makeForecast',
+        data: {
+          period: $("#period").val(),
+          types: crimesSelected,
+          regions: regions,
+          places: places, 
+          arrest: arrest,
+          startDate: $("#startDate").val(),
+          endDate: $("#endDate").val(),
+          // values of Prophet parameters
+          modeAdditif: $("#modeAdditif").val(),
+          modeMultiplicatif: $("#modeMultiplicatif").val(),
+          ordreHebdomadaire: $("#ordreHebdomadaire").val(),
+          ordreAnnuel: $("#ordreAnnuel").val(),
+          seasonalityPriorScale: $("#seasonalityPriorScale").val(),
+          changepointPriorScale: $("#changepointPriorScale").val()
+        },
+        success: function (result) {
+          console.log("ah shit")
+          // var element1  = document.getElementById('chartdivYearly');
+          // console.log("i am here");
+          //forecastChart(result);
+          forecastAll(result);
+          paths = JSON.parse(result['paths']);
+          metriques = JSON.parse(result['metriques']);
+          console.log(metriques);
+          var element1 = document.getElementById('components');
+          var element = document.getElementById('results');
+          var element3 = document.getElementById('link')
+          element1.innerHTML = '<image style="height: 600px;" id="image1" src="../../' + paths['path_components'] + '">';
+
+          element3.innerHTML += '<a href="../../' + paths['path_components'] + '> Sauvegarder</a>';
+          //element.innerHTML = '<h3> RMSE: </h3>'+ metriques['rmse'] + '<h3> MAPE : </h3>' + metriques['mape'] + '';
+          element.innerHTML = '<table class="table text-center"><thead class="text-uppercase bg-success"><tr><th>RMSE</th><th>MAPE</th></thead></tr><tr><th>' +metriques["rmse"].toFixed(2)+ '</th><th>' + metriques["mape"].toFixed(4) * 100 +'</th></tr></table>'
+
+        },
+        error: function (msg) {
+          alert('no response', msg);
+        }
+      });
+    });
+
+    $('.date').datepicker({
+        multidate: true,
+        format: 'dd-mm-yyyy'
+      });
+
+  </script>
+
+
+  {% endblock %}
+</body>
+
+</html>
+

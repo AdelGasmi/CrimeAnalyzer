@@ -1,0 +1,4 @@
+this is a simple text file
+this is another commit
+another one 
+and another one

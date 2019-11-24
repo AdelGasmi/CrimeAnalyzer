@@ -1,0 +1,124 @@
+{% extends 'visual/base.html' %}
+{% block page_name %} Bienvenue {% endblock %}
+{% block content %}
+
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 mt-5">
+                            <div class="card card-bordered">
+                                <img class="card-img-top img-fluid" src="../../static/visual/assets/images/card/dataVis.jpg" alt="image">
+                                <div class="card-body">
+                                    <h5 class="title">Visualisation dynamique et interactive.</h5>
+                                    <a href="/vis/home/" class="btn btn-primary">Consulter</a>
+                                    <a href="#" class="btn btn-danger" data-toggle="modal"   data-target=".bd-example-modal-lg3">Voir tutorial</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 mt-5">
+                            <div class="card card-bordered">
+                                <img class="card-img-top img-fluid" src="../../static/visual/assets/images/card/mapVis.gif" alt="image">
+                                <div class="card-body">
+                                    <h5 class="title">Visualisation sur une carte geopgraphique et heatmap</h5>
+                                    <a href="/vis/map/" class="btn btn-primary">Consulter</a>
+                                    <a href="#" class="btn btn-danger" data-toggle="modal"   data-target=".bd-example-modal-lg4">Voir tutorial</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 mt-5">
+                            <div class="card card-bordered">
+                                <img class="card-img-top img-fluid" src="../../static/visual/assets/images/card/knowl.jpeg" alt="image">
+                                <div class="card-body">
+                                    <h5 class="title">Extraction de connaissances : clustering et ACP</h5>
+                                    <a href="/vis/cluster-district/" class="btn btn-primary">Consulter</a>
+                                    <a href="#" class="btn btn-danger" data-toggle="modal"   data-target=".bd-example-modal-lg5">Voir tutorial</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 mt-5">
+                            <div class="card card-bordered">
+                                <img class="card-img-top img-fluid" src="../../static/visual/assets/images/card/forecast.jpg" alt="image">
+                                <div class="card-body">
+                                    <h5 class="title">Prevision des crimes</h5>
+                                    <a href="/predict/make/" class="btn btn-primary">Consulter</a>
+                                    <a href="#" class="btn btn-danger" data-toggle="modal"  data-target=".bd-example-modal-lg2">Voir tutorial</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 mt-5">
+                            <div class="card card-bordered">
+                                <img class="card-img-top img-fluid" src="../../static/visual/assets/images/card/rep.jpg" alt="image">
+                                <div class="card-body">
+                                    <h5 class="title">Reporting et sauvegarde des resultats </h5>
+                                    <p class="card-text">
+                                    </p>
+                                    <a href="/vis/home/" class="btn btn-primary">Consulter</a>
+                                    <a href="#" class="btn btn-danger" data-toggle="modal"   data-target=".bd-example-modal-lg1">Voir tutorial</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+<div class="modal fade bd-example-modal-lg3" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <video width="800"  controls <source src="../../static/visual/assets/videos/dashboard.mp4" type="video/mp4">>
+      </video>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg4" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <video width="800"  controls <source src="../../static/visual/assets/videos/maps.mp4" type="video/mp4">>
+      </video>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg5" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <video width="800"  controls <source src="../../static/visual/assets/videos/clustering.avi" type="video/mp4">>
+      </video>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade bd-example-modal-lg1" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <video width="800"  controls <source src="../../static/visual/assets/videos/dashboard.mp4" type="video/mp4">>
+      </video>
+    </div>
+  </div>
+</div>
+
+    <div class="modal fade bd-example-modal-lg2" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <video width="800"  controls <source src="../../static/visual/assets/videos/adele.mp4" type="video/mp4">>
+      </video>
+    </div>
+  </div>
+</div>
+
+
+
+
+{% endblock %}
+
+
+</body>
+
+</html>
+{% block scripts %}
+    <script>
+    function setSource(source) {
+        element = document.getElementById('videoSource')
+        element.innerHTML='';
+        element.innerHTML = '<source src="../../static/visual/assets/videos/'+source+'.mp4" type="video/mp4">';
+    }
+    </script>
+{% endblock %}

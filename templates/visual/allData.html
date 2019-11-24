@@ -1,0 +1,116 @@
+{% extends 'visual/base.html' %}
+
+{% block content %}
+                <!-- MAIN CONTENT GOES HERE -->
+                <div class="row">
+                    <div class="col-12 mt-5">
+                        <div id="monthly-move-chart"></div>
+                        <div id="monthly-volume-chart"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mt-5">
+                        <div id="district-chart"></div>
+                        <div id="type-chart"></div>
+                    </div>
+                </div>
+                <div class="row" id="graph" style="visibility: hidden">
+                         <div class="col-xl-12 mt-2">
+                            <div class="card">
+                                <div class="card-body" id="mapParent">
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <h4 class="header-title">Type de crimes | intervalle: <span id="date-range"></span></h4>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <button class="pull-right btn btn-rounded btn-primary mb-3"  onclick="toPNG('compareChart', 'comparaison')" ><span class="fa fa-download"></button>
+                                        </div>
+                                    </div>
+                                    <div id="compareChart" style="width: 100%; height: 500px"></div>
+                                </div>
+                            </div>
+                         </div>
+                </div>
+                <div class="row" id="table-all" style="visibility: hidden">
+                    <div class="col-xl-12 mt-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="header-title">Crimes stats</h4>
+                                <div class="single-table">
+                                    <div class="table-responsive">
+                                        <table class="table text-center">
+                                            <thead class="text-uppercase bg-primary">
+                                                <tr class="text-white">
+                                                    <th scope="col">Type</th>
+                                                    <th scope="col">Max</th>
+                                                    <th scope="col">Min</th>
+                                                    <th scope="col">Mediane</th>
+                                                    <th scope="col">Total</th>
+                                                    <th scope="col">Moyenne</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="table-body">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="table-corr" style="visibility: hidden">
+                    <div class="col-xl-12 mt-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="header-title">Correlation</h4>
+                                <div class="single-table">
+                                    <div class="table-responsive">
+                                        <table class="table text-center">
+                                            <thead class="text-uppercase bg-primary">
+                                                <tr class="text-white">
+                                                    <th scope="col">Type de crime</th>
+                                                    <th scope="col">Correlation</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody id="table-body-corr">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript">
+        $.ajax({
+        type:'GET',
+        url: 'allData/',
+        /*beforeSend: function(){
+            var spinner = new Spinner({color:'#fff', lines:12}).spin(target);
+        },
+        complete: function(){
+            spinner.stop();
+            //$('#image-loading').hide();
+
+        },*/
+        success : function (response) {
+            var result = response['data'];
+            var result2= result;
+            console.log(result2);
+            makeSomething(result);
+        },
+        error : function (error) {
+            alert(error);
+        }
+    })
+    </script>
+{% endblock %}
+</body>
+
+</html>

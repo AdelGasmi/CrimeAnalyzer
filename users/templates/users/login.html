@@ -1,0 +1,102 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>CrimeAnalyzer - Visualisation et prévision de la criminalité | Gendarmerie Nationale</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="{% static "/visual/assets/images/icon/logo.ico" %}">
+    <link rel="shortcut icon" type="image/png" href="{% static "/visual/assets/images/icon/favicon.ico" %}">
+    <link rel="stylesheet" href="{% static "/visual/assets/css/bootstrap.min.css" %}">
+    <link rel="stylesheet" href="{% static "/visual/assets/css/font-awesome.min.css" %}">
+    <link rel="stylesheet" href="{% static "/visual/assets/css/themify-icons.css" %}">
+    <link rel="stylesheet" href="{% static "/visual/assets/css/metisMenu.css"  %}">
+    <link rel="stylesheet" href="{% static "/visual/assets/css/owl.carousel.min.css"  %}">
+    <link rel="stylesheet" href="{% static "/visual/assets/css/slicknav.min.css"  %}">
+    <!-- amchart css -->
+    <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+    <!-- others css -->
+    <link rel="stylesheet" href="{% static "/visual/assets/css/typography.css"  %}">
+    <link rel="stylesheet" href="{% static "/visual/assets/css/default-css.css"  %}">
+    <link rel="stylesheet" href="{% static "/visual/assets/css/styles.css"  %}">
+    <link rel="stylesheet" href="{% static "/visual/assets/css/responsive.css"  %}">
+    <!-- modernizr css -->
+    <script src="{% static "/visual/assets/js/vendor/modernizr-2.8.3.min.js"  %}"></script>
+</head>
+
+<body>
+    <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+    <!-- preloader area start -->
+    <div id="preloader">
+        <div class="loader"></div>
+    </div>
+    <!-- preloader area end -->
+    <!-- login area start -->
+    <div class="login-area">
+        <div class="container">
+            <div class="login-box ptb--100">
+                <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    <div class="login-form-head">
+                        <img src="../../../static/visual/assets/images/icon/logo%20white.png">
+                        {% if form.errors %}
+                            <div class="alert btn-danger alert-dismissible fade show" role="alert">
+                                 <p>Your username and password didn't match. Please try again.</p>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span class="fa fa-times"></span>
+                                </button>
+                            </div>
+                        {% endif %}
+                    <p>Connectez vous </p>
+
+                    </div>
+
+                    <div class="login-form-body">
+                        <div class="form-gp">
+                            <label for="exampleInputEmail1">Nom d'utilisateur </label>
+                            <input name="username" type="text" >
+                            <i class="ti-email"></i>
+                        </div>
+                        <div class="form-gp">
+                            <label for="exampleInputPassword1">Mot de passe</label>
+                            <input name="password" type="password" id="exampleInputPassword1">
+                            <i class="ti-lock"></i>
+                        </div>
+                        <div class="row mb-4 rmber-area">
+                            <div class="col-6">
+
+                            </div>
+                            <div class="col-6 text-right">
+                                <a href="#">Mot de passe oublié?</a>
+                            </div>
+                        </div>
+                        <div class="submit-btn-area">
+                            <button id="form_submit" type="submit">Connexion <i class="ti-arrow-right"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- login area end -->
+
+    <!-- jquery latest version -->
+    <script src="{% static "/visual/assets/js/vendor/jquery-2.2.4.min.js" %}"></script>
+    <!-- bootstrap 4 js -->
+    <script src="{% static "/visual/assets/js/popper.min.js" %}"></script>
+    <script src="{% static "/visual/assets/js/bootstrap.min.js" %}"></script>
+    <script src="{% static "/visual/assets/js/owl.carousel.min.js" %}"></script>
+    <script src="{% static "/visual/assets/js/metisMenu.min.js" %}"></script>
+    <script src="{% static "/visual/assets/js/jquery.slimscroll.min.js" %}"></script>
+    <script src="{% static "/visual/assets/js/jquery.slicknav.min.js" %}"></script>
+
+    <!-- others plugins -->
+    <script src="{% static "/visual/assets/js/plugins.js" %}"></script>
+    <script src="{% static "/visual/assets/js/scripts.js" %}"></script>
+</body>
+
+</html>

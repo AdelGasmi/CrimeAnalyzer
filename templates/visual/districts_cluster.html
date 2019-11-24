@@ -1,0 +1,231 @@
+{% extends 'visual/base.html' %}
+{% block page_name %} Clustering des régions {% endblock %}
+{% block content %}
+                <!-- MAIN CONTENT GOES HERE -->
+                <div class="row">
+                    <div class="col-12 mt-5">
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="accordion5" class="according accordion-s2 gradiant-bg">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <a class="card-link" data-toggle="collapse" href="#accordion51" aria-expanded="true">Paramètres des algorithmes  </a>
+                                        </div>
+                                        <div id="accordion51" class="collapse" data-parent="#accordion5" style="">
+                                            <div class="card-body">
+                                                <form action="{% url 'kmeans'  %}" method="post" id="filter_form">
+                                                {% csrf_token %}
+                                                    <h4 class="header-title">Filtrage des données</h4>
+                                                    <b class="text-muted mb-3 mt-4 d-block">Types de crimes</b>
+                                                    <input type="checkbox" onclick="toggle(this, 'types[]');" />Cochez toutes<br/>
+                                                    {% for crime in crimes  %}
+                                                        <div class="custom-control custom-checkbox custom-control-inline">
+                                                        <input type="checkbox" class="custom-control-input crimeBox" id="{{ crime }}" name="types[]" value="{{ crime }}">
+                                                        <label class="custom-control-label" for="{{ crime }}">{{ crime }}</label>
+                                                    </div>
+                                                    {% endfor %}
+                                                    <b class="text-muted mb-3 mt-4 d-block">Choix des regions</b>
+                                                    <input type="checkbox" onclick="toggle(this, 'regions[]');" />Cochez toutes<br />
+                                                    {% for region in regions  %}
+                                                        <div class="custom-control custom-checkbox custom-control-inline">
+                                                        <input type="checkbox" class="custom-control-input regionBox" id="{{ region }}" name="regions[]" value="{{ region }}">
+                                                        <label class="custom-control-label" for="{{ region }}">{{ region }}</label>
+                                                    </div>
+                                                    {% endfor %}
+                                                    <div class="form-row">
+                                                        <div class="col-md-4 mb-3">
+                                                            <div class="form-group">
+                                                                <label for="end_date" class="col-form-label">Nombre de cluster</label>
+                                                                <input class="form-control" name="numberClusters" required id="clusters" type="number">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4 mb-3">
+                                                            <div class="form-group">
+                                                                <label for="end_date" class="col-form-label">Date début </label>
+                                                                <input class="form-control" name="startDate" value="2015-01-01" required id="startDate" type="date">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4 mb-3">
+                                                            <div class="form-group">
+                                                                <label for="end_date" class="col-form-label">Date fin </label>
+                                                                <input class="form-control" name="endDate" value="2016-01-01" required id="endDate" type="date">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary mt-4 pr-4 pl-4" >Calculer</button>
+
+                                                 </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="result" style="visibility: hidden;">
+                    <div class="col-xl-12 mt-2">
+                        <div class="card">
+                            <div class="card-body">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <a class="card-link" data-toggle="collapse" href="#accordion11" aria-expanded="true">Résultats intermédiaires</a>
+                                        </div>
+                                        <div id="accordion11" class="collapse hide" data-parent="#accordion1" style="">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <div class="row">
+                                                            <div id="pca_result"></div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div id="numberClusters"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <div class="single-table">
+                                                            <div class="table-responsive">
+                                                                <table class="table text-center">
+                                                                    <thead class="text-uppercase bg-primary">
+                                                                        <tr class="text-white">
+                                                                            <th scope="col">Type</th>
+                                                                            <th scope="col">CP1</th>
+                                                                            <th scope="col">CP2</th>
+                                                                            <th scope="col">CP3</th>
+                                                                            <th scope="col">CP4</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="table-body">
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div id="image_result" >
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6" id="parent">
+                                        <div id="map-clusters">
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    <div    class="row">
+        <div class="col-xl-12 mt-2">
+                        <!--<div class="card">
+                            <div class="card-body" id="parent">
+                                <div id="map-clusters" style="width: 500px; height: 500px"></div>
+                            </div>
+                        </div>-->
+        </div>
+    </div>
+    <div class="modal1"><!-- Place at bottom of page --></div>
+
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript">
+
+    $body = $("body");
+
+    $(document).on({
+        ajaxStart: function() { $body.addClass("loading");    },
+        ajaxStop: function() { $body.removeClass("loading"); }
+    });
+
+
+
+        var token = '{{csrf_token}}';
+        $(document).on('submit', '#filter_form', function(e){
+
+            if(document.getElementById('image1')){
+                document.getElementById('image1').remove();
+            };
+            if(document.getElementById('image2')){
+                document.getElementById('image2').remove();
+            };
+            if(document.getElementById('image3')){
+                document.getElementById('image3').remove();
+            };
+            e.preventDefault();
+            var crimesSelected = [];
+            $(".crimeBox:checked").each(function () {
+                crimesSelected.push(this.value)
+            });
+            var arrest = [];
+            $(".arrest:checked").each(function () {
+                arrest.push(this.value)
+            });
+            var regions = [];
+            $(".regionBox:checked").each(function () {
+                regions.push(this.value)
+            });
+            $.ajax({
+                headers: { "X-CSRFToken": token },
+                type:'POST',
+                url:'../clusterDistricts',
+                data:{
+                    types: crimesSelected,
+                    regions: regions,
+                    numberClusters: $("#clusters").val(),
+                    startDate : $("#startDate").val(),
+                    endDate: $("#endDate").val(),
+                },
+                success : function (response) {
+                    //console.log(response['labels']);
+                    var element  = document.getElementById('pca_result');
+                    var element1  = document.getElementById('image_result');
+                    var elementX  = document.getElementById('numberClusters');
+
+                    //if(element1.innerHTML !== ''){element1.innerHTML = '';};
+                    paths = JSON.parse(response['paths']);
+
+                    element.innerHTML = '<image id="image1" src="../../'+paths['pcaResult']+'">';
+                    element1.innerHTML = '<image style="height: 500px;" id="image2" src="../../'+paths['clusterResult']+'">';
+                    elementX.innerHTML = '<image id="image3" src="../../'+paths['numberClusters']+'">';
+
+                    var element2 = document.getElementById('result');
+                    if(element2.style.visibility =='hidden'){
+                        element2.style.visibility = 'visible';
+                    };
+                    values = JSON.parse(response['data']);
+                    types = JSON.parse(response['types']);
+                    var html = '';
+                    i = 0;
+                    for(var i;i<types.length;i++){
+                        html+= '<tr><th>'+types[i]+'</th>'+'<th>'+values[i]['PC1']+'</th>'+
+                                '<th>'+values[i]['PC2']+'</th>'+'<th>'+values[i]['PC3']+'</th>'+
+                                '<th>'+values[i]['PC4']+'</th></tr>'
+                    }
+
+                    var table =document.getElementById('table-body');
+                    table.innerHTML = html;
+                    document.getElementById('parent').innerHTML = '<div id="map-clusters" style="width: 100%; height: 500px"></div>'
+                    makeMapForClustering(response['regions'], response['labels'], $("#clusters").val(), response['colors'],JSON.parse(response['regionsColord']));
+
+                },
+                error : function (msg) {
+                    alert('no response');
+                }
+            });
+        });
+    </script>
+{% endblock %}
+</body>
+
+</html>

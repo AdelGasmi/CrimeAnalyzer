@@ -1,0 +1,184 @@
+{% extends 'visual/base.html' %}
+{% block page_name %} Carte des points chauds{% endblock %}
+{% block content %}
+                <!-- MAIN CONTENT GOES HERE -->
+                <div class="row">
+                    <div class="col-12 mt-5">
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="accordion5" class="according accordion-s3 gradiant-bg">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <a class="card-link" data-toggle="collapse" href="#accordion51" aria-expanded="true">Filtrage des données</a>
+                                        </div>
+                                        <div id="accordion51" class="collapse" data-parent="#accordion5" style="">
+                                            <div class="card-body">
+                                                <form action="{% url 'filterData'  %}" method="post" id="filter_form">
+                                        {% csrf_token %}
+                                            <b class="text-muted mb-3 mt-4 d-block">Types de crimes</b>
+                                                <input type="checkbox" onclick="toggle(this, 'types[]');" />Cochez toutes<br />
+                                            {% for crime in crimes  %}
+                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input type="checkbox" class="custom-control-input crimeBox" id="{{ crime }}" name="types[]" value="{{ crime }}">
+                                                <label class="custom-control-label" for="{{ crime }}">{{ crime }}</label>
+                                            </div>
+                                            {% endfor %}
+                                            <b class="text-muted mb-3 mt-4 d-block">Choix des régions</b>
+                                                <input type="checkbox" onclick="toggle(this, 'regions[]');" />Cochez toutes<br />
+                                            {% for region in regions  %}
+                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input type="checkbox" class="custom-control-input regionBox" id="{{ region }}" name="regions[]" value="{{ region }}">
+                                                <label class="custom-control-label" for="{{ region }}">{{ region }}</label>
+                                            </div>
+                                            {% endfor %}
+                                            <div class="form-row">
+                                                <div class="col-md-4 mb-3">
+                                                    <div class="form-group">
+                                                        <label for="start_date" class="col-form-label">Date début</label>
+                                                        <input class="form-control" name="startDate" type="date" value="2016-01-05" id="start_date">
+                                                     </div>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <div class="form-group">
+                                                        <label for="end_date" class="col-form-label">Date Fin</label>
+                                                        <input class="form-control" name="endDate" type="date" value="2016-03-05" id="end_date">
+                                                     </div>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="end_date" class="col-form-label">Arrestation</label>
+                                                    <div class="form-group">
+                                                        <div class="custom-control custom-checkbox custom-control-inline">
+                                                            <input type="checkbox" class="custom-control-input arrest" id="true" name="arrest[]" value="1">
+                                                            <label class="custom-control-label" for="true">Oui</label>
+                                                        </div>
+                                                        <div class="custom-control custom-checkbox custom-control-inline">
+                                                            <input type="checkbox" class="custom-control-input arrest" id="false" name="arrest[]" value="0">
+                                                            <label class="custom-control-label" for="false">Non</label>
+                                                        </div>
+                                                     </div>
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary mt-4 pr-4 pl-4" >Soumettre</button>
+
+                                        </form>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 mt-2">
+                        <div class="card">
+                            <div class="card-body">
+                                        <h4 class="header-title">Options du HeatMap</h4>
+
+                                            <div class="form-row">
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="validationCustom02">Rayon</label>
+                                                    <input type="number" class="form-control" id="radius"  value="20" step="1" >
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="validationCustom02">Brouiller</label>
+                                                    <input type="number" class="form-control" id="blur"  value="15" step="1" >
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="validationCustom01">Densité minimale</label>
+                                                    <input type="number" class="form-control" id="max"  value="1.0" step="1" >
+                                                </div>
+
+                                            </div>
+                                            <button class="btn btn-primary" onclick="changeConfigHeatMap()" type="submit">Valider</button>
+
+                                    </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 mt-2">
+                        <div class="card">
+                            <div class="card-body" id="mapParent">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <h4 class="header-title">Infractions | Nombre total:  <span id="total-number"></span></h4>
+                                    </div>
+                                </div>
+                                <div id="map" style="width: 100%; height: 500px"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+    <div class="modal1"><!-- Place at bottom of page --></div>
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript">
+
+
+    $body = $("body");
+
+
+    $(document).on({
+        ajaxStart: function() { $body.addClass("loading");    },
+        ajaxStop: function() { $body.removeClass("loading"); }
+    });
+    var result;
+    var req= $.getJSON('data/', function (data) {
+         var result1  = makeHeatMap(data, false);
+         console.log(result1);
+         result =  result1;
+    })
+
+        var token = '{{csrf_token}}';
+        $(document).on('submit', '#filter_form', function(e){
+            e.preventDefault();
+            var crimesSelected = [];
+            $(".crimeBox:checked").each(function () {
+                crimesSelected.push(this.value)
+            });
+            var arrest = [];
+            $(".arrest:checked").each(function () {
+                arrest.push(this.value)
+            });
+            var regions = [];
+            $(".regionBox:checked").each(function () {
+                regions.push(this.value)
+            });
+            $.ajax({
+                headers: { "X-CSRFToken": token },
+                type:'POST',
+                url:'../filterdata',
+                data:{
+                    types: crimesSelected,
+                    regions: regions,
+                    startDate: $("#start_date").val(),
+                    endDate: $("#end_date").val(),
+                    arrest: arrest,
+                },
+                success : function (response) {
+                    result = makeHeatMap(JSON.parse(response), true);//i= i+1;
+
+                },
+                error : function (msg) {
+                    alert('no response');
+                }
+            });
+        });
+
+        function changeConfigHeatMap() {
+            result[1].setOptions({
+                radius: parseInt($("#radius").val()),
+                blur: parseInt($("#blur").val()),
+                max: parseInt($("#max").val()),
+            })
+        }
+
+    </script>
+{% endblock %}
+</body>
+
+</html>

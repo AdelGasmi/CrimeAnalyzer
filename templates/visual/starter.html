@@ -1,0 +1,245 @@
+{% extends 'visual/base.html' %}
+{% block page_name %} Tableau de bord {% endblock %}
+{% block content %}
+                <div class="row">
+                    <div class="col-xl-3">
+                        <div class="card mt-2">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h4 class="header-title mb-0"> Type de crimes </h4>
+                                </div>
+                                <div id="crime-type"></div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-9">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="card mt-2">
+
+                                    <div class="card-body">
+                                        <h4 class="header-title">Intervalle d'analyse</h4>
+                                        <form action="{% url 'homeFiltred'  %}" method="post" id="filter_form">
+                                            <div class="form-row align-items-center">
+                                                <div class="col-sm-4 my-1">
+                                                    <label class="sr-only" for="inlineFormInputName">Date debut</label>
+                                                    <input type="date" class="form-control" id="startDate" placeholder="">
+                                                </div>
+                                                <div class="col-sm-4 my-1">
+                                                    <label class="sr-only" for="inlineFormInputName">Date fin</label>
+                                                    <input type="date" class="form-control" id="endDate" placeholder="">
+                                                </div>
+                                                <div class="col-sm-4 my-1">
+                                                    <button type="submit" class="btn btn-block btn-primary">Soumettre</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card mt-2">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <button onclick="dc.filterAll(); dc.redrawAll();" class="btn btn-block btn-danger">Annuler les filters</button>
+                                        </div>
+                                        <div class="row">
+                                            <button class="btn btn-block btn-success" id="download-csv">Télécharger les données (csv)</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-12 col-lg-8">
+                                <div class="card mt-2">
+                                    <div class="card-body" id="timeline-container">
+                                        <div class="row">
+                                            <div class="col-sm-8 d-flex justify-content-between align-items-center">
+                                                <h4 class="header-title mb-0">Timeline | Nombre d'infraction
+                                                <span id="number-records"></span></h4>
+                                                <a class="reset" href="javascript:dc.filterAll();dc.redrawAll()"; style="display:none;">Reset</a>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <button class="pull-right btn btn-rounded btn-light mb-3"  onclick="toPNG('time-chart', 'timeline')" ><span class="fa fa-download"></span></button>
+                                            </div>
+                                        </div>
+                                        <div  id="time-chart"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-4 col-lg-4 coin-distribution">
+                                <div class="card mt-2">
+                                    <div class="card-body" id="pie-chart-container">
+                                        <div class="row">
+                                            <div class="col-sm-8 ">
+                                                <h4 class="header-title mb-0">Taux d'arrestation</h4>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <button class="pull-right btn btn-rounded btn-light mb-3"  onclick="toPNG('arrest', 'arrest-chart')" ><span class="fa fa-download"></span></button>
+                                            </div>
+                                        </div>
+
+                                        <div id="arrest"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-8 col-lg-6 coin-distribution">
+                                <div class="card mt-2">
+                                    <div class="card-body" id="pie-chart-container">
+                                        <div class="row">
+                                            <div class="col-sm-8 ">
+                                                <h4 class="header-title mb-0">Distribution par jour</h4>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <button class="pull-right btn btn-rounded btn-light mb-3"  onclick="toPNG('day-of-week-chart', 'jour-semaine')" ><span class="fa fa-download"></span></button>
+                                            </div>
+                                        </div>
+                                        <div id="day-of-week-chart"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                         <div class="col-xl-6 mt-2">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                            <div class="col-sm-8 ">
+                                                <h4 class="header-title mb-0">Heat-Map</h4>
+                                            </div>
+                                            <div class="col-sm-4">
+                                            </div>
+                                    </div>
+                                    <div id="map" style="width: 550px; height: 400px"></div>
+                                </div>
+                            </div>
+                         </div>
+                         <div class="col-xl-6 mt-2">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                            <div class="col-sm-8 ">
+                                                <h4 class="header-title mb-0">Distribution géographique</h4>
+                                            </div>
+                                            <div class="col-sm-4">
+                                            </div>
+                                    </div>
+                                    <div id="map2" style="width: 550px; height: 400px"></div>
+                                </div>
+                            </div>
+                         </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 mt-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                            <div class="col-sm-8 ">
+                                                <h4 class="header-title mb-0">Distribution par région</h4>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <button class="pull-right btn btn-rounded btn-light mb-3"  onclick="toPNG('district-chart', 'distribution')" ><span class="fa fa-download"></span></button>
+                                            </div>
+                                </div>
+                                <div id="district-chart"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+<div class="modal1"><!-- Place at bottom of page --></div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+    $body = $("body");
+
+    $(document).on({
+        ajaxStart: function() { $body.addClass("loading");    },
+        ajaxStop: function() { $body.removeClass("loading"); }
+    });
+    //var req= $.getJSON('data/', function (data) {
+        //console.log(data);
+    //makeGraphs(JSON.parse(data));
+    //})
+    var result, dc, ndx, dcCharts, crimeMap;
+
+    $.ajax({
+        type:'GET',
+        url: 'data/',
+        /*beforeSend: function(){
+            var spinner = new Spinner({color:'#fff', lines:12}).spin(target);
+        },
+        complete: function(){
+            spinner.stop();
+            //$('#image-loading').hide();
+
+        },*/
+        success : function (response) {
+            //console.log(JSON.parse(response));
+            result = makeGraphs(JSON.parse(response));
+            dc = result[0];
+            ndx = result[1];
+            dcCharts = result[2];
+            crimeMap = dcCharts[3];
+            //dc.renderAll();
+            //$('#image-loading').hide();
+
+        },
+        error : function (error) {
+            alert(error);
+        }
+    })
+
+
+     var token = '{{csrf_token}}';
+        $(document).on('submit', '#filter_form', function(e){
+            e.preventDefault();
+            $.ajax({
+                headers: { "X-CSRFToken": token },
+                type:'POST',
+                url:'../customeHome',
+                data:{
+                    startDate: $("#startDate").val(),
+                    endDate: $("#endDate").val(),
+                },
+                success : function (response) {
+                    var parseTime = d3.timeParse("%m/%d/%Y");
+                    records = JSON.parse(response);
+                    records.forEach(function (d) {
+                        d["Date"] = parseTime(d["Date"]);
+                    });
+
+                    //reseting filters
+                    //dcCharts.forEach(function (d) {
+                        //d.filter(null);
+                    //})
+                    
+                    //removing existing data and redrawing all
+                    ndx.remove();
+                    ndx.add(records);
+                    dc.redrawAll();
+                    crimeMap.redraw();
+                },
+                error : function (msg) {
+                    alert('clearing all filters or'+msg);
+                }
+            });
+        });
+
+
+
+    </script>
+{% endblock %}
+</body>
+
+</html>
