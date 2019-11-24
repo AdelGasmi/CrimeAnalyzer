@@ -11,7 +11,7 @@ For this snap shot, and for dev purposes (privacy of the data that we worked on)
 
 ## Data used
 
-Because of the nature of the data of our final project, I used a public dataset that is available [HERE](https://www.kaggle.com/currie32/crimes-in-chicago).
+Because of the nature of the data of our final project, I used a public dataset that is available [here](https://www.kaggle.com/currie32/crimes-in-chicago).
  
 ## Timeseries forecasting
 
